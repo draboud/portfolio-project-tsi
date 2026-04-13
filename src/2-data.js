@@ -51,8 +51,6 @@ class Data {
       ["view-1-mp", ASSETS["view-1"].mobile],
       ["view-2", ASSETS["view-2"].desktop],
       ["view-2-mp", ASSETS["view-2"].mobile],
-      ["view-3", ASSETS["view-3"].desktop],
-      ["view-3-mp", ASSETS["view-3"].mobile],
     ]);
   }
   //.......................................................................
@@ -63,7 +61,7 @@ class Data {
     this.dimmer.classList.remove("active");
     this.txtOrImg = "image";
     this.txtImgBtn.textContent = "image";
-    this.hideBackBtn();
+    this.hideAllBackBtns();
     this.hideAllData();
     this.resetAllDataSheets();
     this.introText.classList.add("active");
@@ -117,10 +115,10 @@ class Data {
     });
     this.activeDataSheet.classList.add("active");
   };
-  hideBackBtn = () => {
-    this.activeCtrlBtnWrapper
-      .querySelector(".ctrl-btn-back")
-      .classList.remove("active");
+  hideAllBackBtns = () => {
+    this.allCtrlBtnWrappers.forEach((el) => {
+      el.querySelector(".ctrl-btn-back").classList.remove("active");
+    });
   };
   showBackBtn = () => {
     this.activeCtrlBtnWrapper
@@ -279,7 +277,7 @@ class Data {
     this.resetAllDataSheets();
     this.dimmer.classList.remove("active");
     this.introText.classList.add("active");
-    this.hideBackBtn();
+    this.hideAllBackBtns();
     this.showCtrlBtnWrapper();
 
     //setting vid element...

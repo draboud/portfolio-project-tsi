@@ -11,34 +11,25 @@ export const TIMING = Object.freeze({
 export const ASSETS = Object.freeze({
   "view-1": {
     desktop:
-      "https://cdn.prod.website-files.com/69b060726c9c10d0cebbf5f3/69b06678707c7b74a524f9f4_Data-View-1.webp",
+      "https://cdn.prod.website-files.com/61e77b1e3ddfc76b6fe81446/69dc14060009e236c0c0f119_Components-View-A.webp",
     mobile:
-      "https://cdn.prod.website-files.com/69b060726c9c10d0cebbf5f3/69b066780bffd055268006d5_Data-View-1-MP.webp",
+      "https://cdn.prod.website-files.com/61e77b1e3ddfc76b6fe81446/69dc140698d66fcc5992f6a1_Components-View-A-Mobile-P.webp",
   },
   "view-2": {
     desktop:
-      "https://cdn.prod.website-files.com/69b060726c9c10d0cebbf5f3/69b066788514192dd118f92e_Data-View-2.webp",
+      "https://cdn.prod.website-files.com/61e77b1e3ddfc76b6fe81446/69dc140642f49cf016b02faf_Components-View-B.webp",
     mobile:
-      "https://cdn.prod.website-files.com/69b060726c9c10d0cebbf5f3/69b06678f95e3f4b347c21a6_Data-View-2-MP.webp",
-  },
-  "view-3": {
-    desktop:
-      "https://cdn.prod.website-files.com/69b060726c9c10d0cebbf5f3/69b06678663d4800cc5f9935_Data-View-3.webp",
-    mobile:
-      "https://cdn.prod.website-files.com/69b060726c9c10d0cebbf5f3/69b066785c709890f1f02679_Data-View-3-MP.webp",
+      "https://cdn.prod.website-files.com/61e77b1e3ddfc76b6fe81446/69dc14063b5a21520e44a7b9_Components-View-B-Mobile-P.webp",
   },
 });
 export const VIEW_START_END = Object.freeze({
   "view-1": {
     startTime: 0,
-    endTime: 0,
+    endTime: 3.2,
   },
   "view-2": {
-    startTime: 1.48,
-    endTime: 2.69,
-  },
-  "view-3": {
-    startTime: 4.44,
-    endTime: 5.65,
+    startTime: 3.64,
+    endTime: 6.9,
   },
 });
+export const LOOP_SEQUENCE_VIDS = true;

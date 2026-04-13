@@ -83,12 +83,26 @@ export const deactivateAllSections = function () {
 export const getActiveVid = function () {
   return _state.activeVid;
 };
-export const setActiveVid = function () {
-  allVidCodes.forEach((el) => {
-    if (el.offsetParent !== null) {
-      _state.activeVid = el.querySelector(".vid");
-    }
-  });
+export const setActiveVid = function (activeVidWrap, activeSequenceStep) {
+  if (_state.activeVid) {
+    _state.activeVid.pause();
+    _state.activeVid.src = "";
+  }
+  if (activeVidWrap && activeSequenceStep === null) {
+    activeVidWrap.querySelectorAll(".vid-code").forEach((el) => {
+      if (el.querySelector(".vid").offsetParent !== null) {
+        _state.activeVid = el.querySelector(".vid");
+      }
+    });
+  } else if (activeVidWrap && activeSequenceStep) {
+    _state.activeVid = activeSequenceStep;
+  } else {
+    allVidCodes.forEach((el) => {
+      if (el.querySelector(".vid").offsetParent !== null) {
+        _state.activeVid = el.querySelector(".vid");
+      }
+    });
+  }
 };
 export const getWebflowBreakpoint = function () {
   return _state.webflowBreakpoint;
@@ -156,7 +170,6 @@ export const playRange = function (videoCurrentTime) {
   const startPlaybackSequence = async () => {
     try {
       _state.activeVid.currentTime = targetStart;
-
       // 2. THE FAIL-SAFE REVEAL
       // We poll for physical playhead movement. Once it moves,
       // the "black buffer" is guaranteed to be gone.
@@ -243,7 +256,9 @@ export const toggleBtnHoverClass = function (btn) {
 };
 export const activateCurrentBtn = function (btn) {
   deactivateCurrentBtns();
-  btn.classList.add("current");
+  setTimeout(() => {
+    btn.classList.add("current");
+  }, 50);
 };
 export const deactivateCurrentBtns = function (section) {
   if (!section) section = _state.activeSection;

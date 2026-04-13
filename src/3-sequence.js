@@ -1,3 +1,5 @@
+import { LOOP_SEQUENCE_VIDS } from "./0-config";
+
 class Sequence {
   constructor(globalController, container) {
     this.global = globalController;
@@ -23,7 +25,10 @@ class Sequence {
     this.isDropdown = false;
     this.activeSequence = null;
     this.activeSectionTxt = null;
+    // this.currentVidWrapper = "sequence-1";
     this.activeVidWrapper = null;
+    this.activeSequenceStep = null;
+    this.allActiveSequenceSteps = null;
     this.activeCtrlBtnWrapper = null;
     this.sequenceTimer = null;
     this.sequenceEndIsCancelled = false;
@@ -46,6 +51,11 @@ class Sequence {
     this.hideAllActionHeadings();
     this.setAndShowActiveTxtWrapper();
     this.setAndShowActiveVidWrapper();
+    this.allActiveSequenceSteps = new Set();
+    const steps = this.activeVidWrapper.querySelectorAll(".vid-code");
+    steps.forEach((el) => {
+      this.allActiveSequenceSteps.add(el.dataset.step);
+    });
     this.setAndShowActiveCtrlBtnWrapper();
     this.activeTxtWrapper
       .querySelector(".intro-txt-wrap")
@@ -88,11 +98,27 @@ class Sequence {
     this.activeTxtWrapper.classList.add("active");
   };
   setAndShowActiveVidWrapper = () => {
-    this.allVidWrappers.forEach((el) => el.classList.remove("active"));
+    this.allVidWrappers.forEach(function (el) {
+      el.classList.remove("active");
+      el.querySelectorAll(".vid-code").forEach(function (el2) {
+        el2.classList.remove("active");
+      });
+    });
     this.activeVidWrapper = this.allVidWrappers.find(
       (el) => el.dataset.sequence === this.activeSequence,
     );
     this.activeVidWrapper.classList.add("active");
+  };
+  setActiveSequenceStep = (sequenceStepData) => {
+    this.activeVidWrapper.querySelectorAll(".vid-code").forEach((el) => {
+      if (el.dataset.step === sequenceStepData) {
+        el.classList.add("active");
+      } else {
+        el.classList.remove("active");
+      }
+      if (el.classList.contains("active") && el.offsetParent !== null)
+        this.activeSequenceStep = el.querySelector(".vid");
+    });
   };
   setAndShowActiveCtrlBtnWrapper = () => {
     this.allCtrlBtnWrappers.forEach((el) => el.classList.remove("active"));
@@ -123,7 +149,8 @@ class Sequence {
       .querySelector(".action-heading")
       .classList.add("active");
     this.sequenceEndIsCancelled = false;
-    this.global.setActiveVid();
+    this.setActiveSequenceStep(clickedCtrlBtn.dataset.step);
+    this.global.setActiveVid(this.activeVidWrapper, this.activeSequenceStep);
     this.global.setStartTime(clickedCtrlBtn.dataset.startTime);
     this.global.setEndTime(clickedCtrlBtn.dataset.endTime);
     this.global.activateCurrentBtn(clickedCtrlBtn);
@@ -138,6 +165,27 @@ class Sequence {
     if (this.sequenceEndIsCancelled === false) {
       this.pauseWrapper.classList.remove("active");
       this.global.disablePause(this.pauseWrapper);
+      this.global.deactivateCurrentBtns();
+      if (LOOP_SEQUENCE_VIDS) {
+        let activeStepIndex = [...this.allActiveSequenceSteps].indexOf(
+          this.activeSequenceStep.parentElement.dataset.step,
+        );
+        if (activeStepIndex === this.allActiveSequenceSteps.size - 1)
+          activeStepIndex = 0;
+        else {
+          activeStepIndex += 1;
+        }
+        const nextStepBtn = [
+          ...this.activeCtrlBtnWrapper.querySelectorAll(".ctrl-btn"),
+        ].find(
+          (el) =>
+            el.dataset.step ===
+            [...this.allActiveSequenceSteps][activeStepIndex],
+        );
+        setTimeout(() => {
+          this.playCtrlBtnVid(nextStepBtn);
+        }, 200); //delay to stabilize elements before play
+      }
     }
   };
   clearSequenceTimers = () => {
